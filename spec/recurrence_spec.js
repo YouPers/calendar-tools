@@ -12,7 +12,7 @@ describe('calendar-tools Seed', function () {
                 "allDay": false,
                 "frequency": "week",
                 "recurrence": {
-                "end-by": {
+                "endby": {
                     "type": "on",
                         "on": "2013-12-16T13:00:00.000Z"
                 },

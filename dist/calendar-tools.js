@@ -235,18 +235,18 @@ RFC2445.genRecurrenceString = function (ev, opts) {
 
   // RRULE - frequency value
   var rrule = ''
-    , steps = ['freq', 'repeat', 'end-by', 'interval']
+    , steps = ['freq', 'repeat', 'endby', 'interval']
     , endBy = ''
     , interval = '';
 
-  // end-by type
+  // endby type
 
   // COUNT
-  if (ev.recurrence['end-by'].type == 'after')
-    endBy = ';COUNT=' + ev.recurrence['end-by'].after;
+  if (ev.recurrence['endby'].type == 'after')
+    endBy = ';COUNT=' + ev.recurrence['endby'].after;
   // ON
-  if (ev.recurrence['end-by'].type == 'on')
-    endBy = ';UNTIL=' + _str.value(ev.recurrence['end-by'].on, true, true);
+  if (ev.recurrence['endby'].type == 'on')
+    endBy = ';UNTIL=' + _str.value(ev.recurrence['endby'].on, true, true);
 
   // INTERVAL
   if (ev.recurrence.every != 1)
@@ -292,11 +292,11 @@ RFC2445.genRecurrenceString = function (ev, opts) {
       };
     }
 
-    // add end-by
+    // add endby
     else if (st == 1)
       rrule += endBy;
 
-    // add end-by
+    // add endby
     else if (st == 3)
       rrule += interval;
 
@@ -324,7 +324,7 @@ RFC2445.getRecurrenceObj = function (str) {
   var recRule = str.match(/RRULE(.+)/)
     , recObj = {
           every: 1
-        , 'end-by': {}
+        , 'endby': {}
         , exceptions: []
         , 'repeat-on': {}
       }
@@ -351,18 +351,18 @@ RFC2445.getRecurrenceObj = function (str) {
       recObj.every = prp[1];
     }
 
-    // end-by properties
+    // endby properties
     // AFTER mode
     else if (prp[0] == 'COUNT') {
-      recObj['end-by'].type = 'after';
-      recObj['end-by'].after = prp[1];
+      recObj['endby'].type = 'after';
+      recObj['endby'].after = prp[1];
     }
 
     // UNTIL/on mode
     else if (prp[0] == 'UNTIL') {
-      recObj['end-by'].type = 'on';
+      recObj['endby'].type = 'on';
       var data = _date.parseFromWeirdISOFormat(prp[1]);
-      recObj['end-by'].on = new Date(data);
+      recObj['endby'].on = new Date(data);
       
     }
 
@@ -393,8 +393,8 @@ RFC2445.getRecurrenceObj = function (str) {
   };
 
   // setting default options
-  // end-by type
-  recObj['end-by'].type = recObj['end-by'].type || 'never';
+  // endby type
+  recObj['endby'].type = recObj['endby'].type || 'never';
 
   return recObj;
 };
@@ -1033,9 +1033,9 @@ pptInst.clone = function () {
 
   // on date generation
   if (newInstance.recurrence) {
-    var endBy = newInstance.recurrence['end-by'];
+    var endBy = newInstance.recurrence['endby'];
     if (endBy && endBy.on)
-      newInstance.recurrence['end-by'].on = new Date(endBy.on);
+      newInstance.recurrence['endby'].on = new Date(endBy.on);
   }
 
   return newInstance;
@@ -1251,7 +1251,7 @@ pttSeed.normalize = function () {
   // recurrence default value
   var rec = this.ev.recurrence || {}
     , defVals = { every: 1
-                , 'end-by': {
+                , 'endby': {
                       type: 'never'
                     , after: 5
                     , on: null
@@ -1266,8 +1266,8 @@ pttSeed.normalize = function () {
       rec[k] = defVals[k];
 
   // enf-by on date
-  if (rec['end-by'].on == 'string')
-    rec['end-by'].on = new Date(rec['end-by'].on);
+  if (rec['endby'].on == 'string')
+    rec['endby'].on = new Date(rec['endby'].on);
 
   return this.ev;
 }
@@ -1493,13 +1493,13 @@ pttSeed._getCountdown = function () {
     , endByInstances = maxInstances;
 
   // computing total instances through start / enda dates limits
-  switch (ev.recurrence['end-by'].type) {
+  switch (ev.recurrence['endby'].type) {
     case 'after':
-      endByInstances = ev.recurrence['end-by'].after;
+      endByInstances = ev.recurrence['endby'].after;
     break;
 
     case 'on':
-      var on = new Date(ev.recurrence['end-by'].on);
+      var on = new Date(ev.recurrence['endby'].on);
       on.setDate(on.getDate() + 1);
       endByInstances = this.getElapsedInstances(on, true);
     break;
